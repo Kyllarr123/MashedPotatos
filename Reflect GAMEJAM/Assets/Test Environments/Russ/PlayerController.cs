@@ -20,10 +20,13 @@ public class PlayerController : MonoBehaviour
     public bool onCd = false;
     int layerMask = 1 << 8;
     private Vector3 normGrav;
-    
+
     //Camera
     public GameObject cam;
     private CameraBehaviour camB;
+    
+    //Moveable Ability
+    private GameObject currentMoveable;
 
     private void Awake()
     {
@@ -65,6 +68,15 @@ public class PlayerController : MonoBehaviour
         {
             Flip();
         }
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            Rigidbody moveRb = currentMoveable.GetComponent<Rigidbody>();
+            
+            MoveableObject move = currentMoveable.GetComponent<MoveableObject>();
+            moveRb.constraints = move.rbCs;
+            move.player = gameObject;
+            move.linkedToPlayer = true;
+        }
  
     }
 
@@ -81,7 +93,7 @@ public class PlayerController : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(this.gameObject.transform.position, Vector3.down * 10f, out hit,10f, layerMask))
             {
-                camB.offset.y = -10;
+                camB.offset.y = -4;
                 Renderer rend = hit.collider.GetComponent<Renderer>();
                 flipObjectSize = rend.bounds.size;
                 moveDist = flipObjectSize.y * 2;
@@ -106,7 +118,7 @@ public class PlayerController : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(this.gameObject.transform.position, Vector3.up * 10f, out hit, 10f,layerMask))
             {
-                camB.offset.y = 10;
+                camB.offset.y = 4;
                 Renderer rend = hit.collider.GetComponent<Renderer>();
                 flipObjectSize = rend.bounds.size;
                 moveDist = flipObjectSize.y * 2;
@@ -126,11 +138,41 @@ public class PlayerController : MonoBehaviour
             }
 
         }
+
+
     }
 
     public IEnumerator CD(float Cooldown)
     {
         yield return new WaitForSeconds(Cooldown);
         onCd = false;
+    }
+
+
+    public void PushObject()
+    {
+        
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.tag == "Moveable")
+        {
+
+            currentMoveable = other.gameObject;
+            
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "Moveable")
+        {
+            MoveableObject move = currentMoveable.GetComponent<MoveableObject>();
+            move.player = null;
+            move.linkedToPlayer = false;
+            currentMoveable = null;
+
+        }
     }
 }
