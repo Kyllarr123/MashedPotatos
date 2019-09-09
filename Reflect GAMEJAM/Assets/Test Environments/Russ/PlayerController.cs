@@ -27,6 +27,9 @@ public class PlayerController : MonoBehaviour
     
     //Moveable Ability
     private GameObject currentMoveable;
+    
+    //Clickables
+    public bool canClick = false;
 
     private void Awake()
     {
@@ -68,16 +71,24 @@ public class PlayerController : MonoBehaviour
         {
             Flip();
         }
+
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            Rigidbody moveRb = currentMoveable.GetComponent<Rigidbody>();
+            if (currentMoveable != null)
+            {
+                Rigidbody moveRb = currentMoveable.GetComponent<Rigidbody>();
+
+                MoveableObject move = currentMoveable.GetComponent<MoveableObject>();
+                moveRb.constraints = move.rbCs;
+                move.player = gameObject;
+                move.linkedToPlayer = true;
+            }
             
-            MoveableObject move = currentMoveable.GetComponent<MoveableObject>();
-            moveRb.constraints = move.rbCs;
-            move.player = gameObject;
-            move.linkedToPlayer = true;
+            
         }
- 
+
+
+
     }
 
 
