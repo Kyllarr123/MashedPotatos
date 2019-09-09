@@ -15,14 +15,14 @@ public class CameraBehaviour : MonoBehaviour
     void Update()
     {
         //player camera movement
-        if (Input.GetKey(KeyCode.UpArrow))
-        {
-            transform.Translate(new Vector3(0, speed * Time.deltaTime, 0));
-        }
-        if (Input.GetKey(KeyCode.DownArrow))
-        {
-            transform.Translate(new Vector3(0, -speed * Time.deltaTime, 0));
-        }
+        //if (Input.GetKey(KeyCode.UpArrow))
+        //{
+        //    transform.Translate(new Vector3(0, speed * Time.deltaTime, 0));
+        //}
+        //if (Input.GetKey(KeyCode.DownArrow))
+        //{
+        //    transform.Translate(new Vector3(0, -speed * Time.deltaTime, 0));
+        //}
     }
         
 
@@ -33,5 +33,7 @@ public class CameraBehaviour : MonoBehaviour
         transform.position = smoothedPosition;
 
         transform.LookAt(target);
+
+        // on flip 
     }
 }
